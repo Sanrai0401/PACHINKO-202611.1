@@ -1,0 +1,184 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>おみくじパチンコ</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <main class="machine">
+
+    <!-- タイトル -->
+    <header class="top">
+      <p class="eyebrow">OMIKUJI PACHINKO</p>
+      <h1>おみくじパチンコ</h1>
+      <p class="sub">運命の3桁を、自分のタイミングで止めろ。</p>
+    </header>
+
+    <!-- ゲーム情報 -->
+    <section class="status-panel">
+      <div>
+        <span>持ち玉</span>
+        <strong id="balls">0</strong>
+        <small>玉</small>
+      </div>
+
+      <div>
+        <span>ゲーム状態</span>
+        <strong id="mode">通常</strong>
+      </div>
+
+      <div>
+        <span>保留</span>
+        <strong id="hold-count">0 / 4</strong>
+      </div>
+    </section>
+
+    <!-- パチンコ画面 -->
+    <section class="machine-window">
+
+      <div class="lamp-row">
+        <i></i><i></i><i></i><i></i><i></i>
+      </div>
+
+      <!-- 3つの数字 -->
+      <div class="reel-frame">
+
+        <div class="reel-column">
+          <div class="reel" id="reel-0">1</div>
+          <span>LEFT</span>
+        </div>
+
+        <div class="reel-column">
+          <div class="reel" id="reel-1">1</div>
+          <span>CENTER</span>
+        </div>
+
+        <div class="reel-column">
+          <div class="reel" id="reel-2">1</div>
+          <span>RIGHT</span>
+        </div>
+
+      </div>
+
+      <!-- 個別停止ボタン -->
+      <div class="stop-row">
+        <button class="stop-button" id="stop-0" disabled>
+          左を止める
+        </button>
+
+        <button class="stop-button" id="stop-1" disabled>
+          中央を止める
+        </button>
+
+        <button class="stop-button" id="stop-2" disabled>
+          右を止める
+        </button>
+      </div>
+
+      <!-- 演出メッセージ -->
+      <div id="message" class="message">
+        スタートを押してゲーム開始！
+      </div>
+
+      <!-- 演出表示 -->
+      <div id="effect-layer" class="effect-layer"></div>
+
+    </section>
+
+    <!-- 操作ボタン -->
+    <section class="controls">
+
+      <button id="spin-button" class="main-button">
+        ▶ スタート
+      </button>
+
+      <button id="hold-button" class="hold-button">
+        保留を追加
+      </button>
+
+      <button id="sound-button" class="sound-button">
+        🔊 サウンド ON
+      </button>
+
+    </section>
+
+    <!-- 抽選結果 -->
+    <section class="result-panel">
+      <h2>今回の結果</h2>
+
+      <p id="fortune">
+        まだ抽選していません
+      </p>
+
+      <p id="detail" class="detail">
+        数字が3つ止まると結果が判定されます。
+      </p>
+    </section>
+
+    <!-- ルール説明 -->
+    <details class="rules">
+      <summary>遊び方・ルール説明</summary>
+
+      <div class="rules-content">
+
+        <h3>基本操作</h3>
+        <ol>
+          <li>「スタート」で3つの数字が回転します。</li>
+          <li>左・中央・右の停止ボタンを好きな順番・タイミングで押します。</li>
+          <li>3つすべて止まると結果が判定されます。</li>
+          <li>「保留を追加」で最大4回分まで保留できます。</li>
+        </ol>
+
+        <h3>図柄の意味</h3>
+        <ul>
+          <li>7：大吉（大当たり図柄）</li>
+          <li>6：吉</li>
+          <li>5：中吉</li>
+          <li>4：小吉</li>
+          <li>3：末吉</li>
+          <li>2：凶</li>
+          <li>1：大凶</li>
+        </ul>
+
+        <h3>ゲームモード</h3>
+        <ul>
+          <li>大当たり後はボーナス演出が発生します。</li>
+          <li>ボーナス後はST・確変・時短・上位RUSHのいずれかに移行します。</li>
+          <li>ST・時短には規定回数があります。</li>
+          <li>ドパガキ演出はハズレからの逆転チャンスです。</li>
+        </ul>
+
+        <p class="note">
+          ※遊び用のオリジナル抽選です。
+          実際のパチンコの確率・仕様とは異なります。
+        </p>
+
+      </div>
+    </details>
+
+    <!-- 履歴 -->
+    <section class="history-panel">
+      <h2>履歴</h2>
+      <ol id="history">
+        <li>ゲーム開始待ち</li>
+      </ol>
+    </section>
+
+    <footer>
+      OMIKUJI PACHINKO DEMO
+    </footer>
+
+  </main>
+
+  <!-- JavaScriptファイルの読み込み -->
+  <script src="sound.js"></script>
+  <script src="effects.js"></script>
+  <script src="game.js"></script>
+
+</body>
+</html>
+

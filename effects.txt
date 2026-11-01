@@ -1,0 +1,324 @@
+
+/* =====================================
+   おみくじパチンコ effects.js
+   豪華演出システム
+===================================== */
+
+const effectLayer = document.getElementById("effect-layer");
+const machineElement = document.querySelector(".machine");
+const machineWindow = document.querySelector(".machine-window");
+
+let effectVersion = 0;
+
+// =====================================
+// 演出表示
+// =====================================
+
+function showCinematic(
+  title,
+  subtitle = "",
+  duration = 2600,
+  theme = "gold"
+) {
+  const version = ++effectVersion;
+
+  effectLayer.innerHTML = "";
+
+  effectLayer.className =
+    `effect-layer active blackout effect-${theme}`;
+
+  setTimeout(() => {
+    if (version !== effectVersion) return;
+
+    effectLayer.innerHTML = "";
+
+    const content = document.createElement("div");
+    content.className = "cinematic-content";
+
+    const heading = document.createElement("div");
+    heading.className = "cinematic-title";
+    heading.textContent = title;
+
+    const sub = document.createElement("div");
+    sub.className = "cinematic-subtitle";
+    sub.textContent = subtitle;
+
+    const decoration = document.createElement("div");
+    decoration.className = "cinematic-decoration";
+    decoration.textContent = "✦ ✧ ✦";
+
+    content.append(
+      decoration,
+      heading,
+      sub,
+      decoration.cloneNode(true)
+    );
+
+    effectLayer.appendChild(content);
+
+    effectLayer.className =
+      `effect-layer active effect-${theme}`;
+
+    setTimeout(() => {
+      if (version !== effectVersion) return;
+
+      effectLayer.className = "effect-layer";
+      effectLayer.innerHTML = "";
+    }, duration);
+  }, 450);
+}
+
+// =====================================
+// 画面揺れ
+// =====================================
+
+function shakeScreen(power = "normal") {
+  machineElement.classList.remove(
+    "shake",
+    "shake-strong",
+    "shake-super"
+  );
+
+  void machineElement.offsetWidth;
+
+  const className =
+    power === "super"
+      ? "shake-super"
+      : power === "strong"
+        ? "shake-strong"
+        : "shake";
+
+  machineElement.classList.add(className);
+
+  setTimeout(() => {
+    machineElement.classList.remove(
+      "shake",
+      "shake-strong",
+      "shake-super"
+    );
+  }, 850);
+}
+
+// =====================================
+// フラッシュ
+// =====================================
+
+function flashScreen(color = "gold") {
+  machineWindow.classList.remove(
+    "flash",
+    "flash-red",
+    "flash-rainbow"
+  );
+
+  void machineWindow.offsetWidth;
+
+  const className =
+    color === "rainbow"
+      ? "flash-rainbow"
+      : color === "red"
+        ? "flash-red"
+        : "flash";
+
+  machineWindow.classList.add(className);
+
+  setTimeout(() => {
+    machineWindow.classList.remove(
+      "flash",
+      "flash-red",
+      "flash-rainbow"
+    );
+  }, 800);
+}
+
+// =====================================
+// 光の連続演出
+// =====================================
+
+function burstEffect(color = "gold") {
+  const version = effectVersion;
+
+  const burst = document.createElement("div");
+  burst.className = `burst-effect burst-${color}`;
+
+  effectLayer.appendChild(burst);
+
+  setTimeout(() => {
+    if (version === effectVersion) {
+      burst.remove();
+    }
+  }, 1200);
+}
+
+// =====================================
+// 大当たり
+// =====================================
+
+function playJackpotEffect(
+  title = "大当たり！！",
+  subtitle = "BONUS START"
+) {
+  showCinematic(title, subtitle, 3000, "gold");
+
+  shakeScreen("strong");
+  flashScreen("gold");
+
+  setTimeout(() => {
+    burstEffect("gold");
+    shakeScreen("strong");
+    flashScreen("gold");
+  }, 600);
+
+  setTimeout(() => {
+    burstEffect("red");
+    flashScreen("red");
+  }, 1200);
+}
+
+// =====================================
+// 777専用演出
+// =====================================
+
+function play777Effect() {
+  showCinematic(
+    "超大当たり！！",
+    "LEGENDARY JACKPOT！！",
+    4200,
+    "rainbow"
+  );
+
+  shakeScreen("super");
+  flashScreen("rainbow");
+
+  setTimeout(() => {
+    burstEffect("rainbow");
+    shakeScreen("super");
+    flashScreen("rainbow");
+  }, 500);
+
+  setTimeout(() => {
+    burstEffect("gold");
+    flashScreen("gold");
+  }, 1200);
+
+  setTimeout(() => {
+    shakeScreen("super");
+    flashScreen("rainbow");
+  }, 1900);
+}
+
+// =====================================
+// 逆転チャンス
+// =====================================
+
+function playDopagakiEffect() {
+  showCinematic(
+    "逆転チャンス！！",
+    "ハズレを覆せ！！",
+    2600,
+    "red"
+  );
+
+  shakeScreen("strong");
+  flashScreen("red");
+
+  setTimeout(() => {
+    flashScreen("gold");
+  }, 900);
+}
+
+// =====================================
+// RUSH・ST
+// =====================================
+
+function playRushEffect(mode = "RUSH", chain = 1) {
+  const title =
+    mode === "上位RUSH"
+      ? "上位RUSH突入！！"
+      : mode === "確変"
+        ? "確変突入！！"
+        : mode === "ST"
+          ? "ST突入！！"
+          : "時短突入！！";
+
+  const theme =
+    mode === "上位RUSH"
+      ? "rainbow"
+      : mode === "確変"
+        ? "gold"
+        : mode === "ST"
+          ? "blue"
+          : "red";
+
+  showCinematic(
+    title,
+    `${chain}連チャン中！！`,
+    3000,
+    theme
+  );
+
+  shakeScreen("strong");
+  flashScreen(theme === "rainbow" ? "rainbow" : "gold");
+}
+
+// =====================================
+// リーチ
+// =====================================
+
+function playReachEffect(strong = false) {
+  if (strong) {
+    showCinematic(
+      "激熱リーチ！！",
+      "期待度大幅アップ！！",
+      1900,
+      "red"
+    );
+
+    shakeScreen("strong");
+    flashScreen("red");
+  } else {
+    showCinematic(
+      "リーチ！！",
+      "運命の瞬間……",
+      1400,
+      "blue"
+    );
+  }
+}
+
+// =====================================
+// 保留先読み
+// =====================================
+
+function playPreReadEffect(color = "blue") {
+  const messages = {
+    normal: ["保留入賞", "何かが起こるかも……"],
+    blue: ["青保留！！", "期待度アップ！"],
+    green: ["緑保留！！", "チャンス到来！"],
+    red: ["赤保留！！", "大チャンス！！"],
+    gold: ["金保留！！", "激熱！！"]
+  };
+
+  const selected =
+    messages[color] || messages.blue;
+
+  const theme =
+    color === "gold"
+      ? "gold"
+      : color === "red"
+        ? "red"
+        : "blue";
+
+  showCinematic(
+    selected[0],
+    selected[1],
+    1400,
+    theme
+  );
+
+  if (color === "red" || color === "gold") {
+    shakeScreen("strong");
+    flashScreen(color);
+  } else {
+    flashScreen("gold");
+  }
+}
